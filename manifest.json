@@ -1,0 +1,25 @@
+{
+    "name":"Faceit stats",
+    "description":"Addtitional stats about you on faceit",
+    "icons": { "128": "Logo.png" },
+
+    "version":"1.0",
+    "manifest_version":2,
+
+    "author": "Scuril",
+
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage"
+    ],
+    "browser_action":{
+        "default_title":"FEx",
+        "default_popup":"main.html"
+    },
+    "content_scripts":[{
+        "matches":["https://www.faceit.com/en/players/*/stats/csgo"],
+        "js":["jqueryMin.js", "logic.js"],
+        "run_at":"document_end"
+    }]
+}
