@@ -46,9 +46,9 @@ const onStart = async () => {
 	await getData();
 	normalizedMatches = normalizeMatchesData(matches);
 	console.log(normalizedMatches);
-	var monthlyD = toMonthlyData(normalizedMatches);
-	console.log(monthlyD);
-	makeGraphByDataAndType(monthlyD, graphTypes[0]);
+	var D = toDailyData(normalizedMatches);
+	console.log(D);
+	makeGraphByDataAndType(D, graphTypes[1]);
 	setInterval(updateTable, 500);
 }
 

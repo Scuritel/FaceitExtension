@@ -22,21 +22,42 @@ const normalizeMatchesData = (data) => {
 	return newData;
 }
 
+const averageData = (currentData) => {
+	let kcd = Object.keys(currentData);
+	let avgData = {};
+	if (kcd.length > 0) {
+		avgData = currentData[kcd[0]];
+		let k = Object.keys(avgData);
+		for (let j = 1; j < kcd.length; j++) {
+			for (let k = 0; k < k.length;k++) {
+				avgData[k] += currentData[kcd[j]][k];
+			}
+		}
+		for (let k = 0; k < k.length;k++) {
+			avgData[k] /= currentData.length;
+		}
+	}
+	return avgData;
+}
+
 //makes normalized match data monthly graph data by averaging
 const toMonthlyData = (normdata) => {
-	
 	var monthData = {}
 	const knd = Object.keys(normdata);
 
 	const date = new Date();
+
 	date.setDate(1);
 	date.setHours(0);
 	date.setMinutes(0);
 	date.setSeconds(0);
+
 	date.setFullYear(date.getFullYear()-1);
+
 	const yearAgots = date.getTime();
 	var bottomLine = -1;
 	var topLine = yearAgots;
+
 	for (let i = 0; i < 12; i++) {
 		if (date.getMonth() == 11) {
 			date.setFullYear(date.getFullYear()+1);
@@ -49,24 +70,11 @@ const toMonthlyData = (normdata) => {
 		//console.log(monthName, topLine-bottomLine, topLine, bottomLine);
 		let currentData = {};
 		for (let j = 0; j < knd.length; j++) {
-			if (knd[j] - bottomLine >= 0 && knd[j] - topLine < 0)
+			if (knd[j] - bottomLine >= 0 && topLine - knd[j] > 0)
 				currentData[knd[j]] = normdata[knd[j]];
 		}
 		//console.log(currentData);
-		let kcd = Object.keys(currentData);
-		let avgData = {};
-		if (kcd.length > 0) {
-			avgData = currentData[kcd[0]];
-			let k = Object.keys(avgData);
-			for (let j = 1; j < kcd.length; j++) {
-				for (let k = 0; k < k.length;k++) {
-					avgData[k] += currentData[kcd[j]][k];
-				}
-			}
-			for (let k = 0; k < k.length;k++) {
-				avgData[k] /= currentData.length;
-			}
-		}
+		let avgData = averageData(currentData);
 
 		monthData[monthName] = avgData;
 	}
@@ -76,7 +84,40 @@ const toMonthlyData = (normdata) => {
 
 //makes normalized match data monthly graph data by averaging
 const toDailyData = (normdata) => {
+	var dailyData = {}
+	const knd = Object.keys(normdata);
+
 	const date = new Date();
+
+	date.setHours(0);
+	date.setMinutes(0);
+	date.setSeconds(0);
+	//date.setMonth(date.getMonth()-3);console.log(date);
+	const normNow = date.getTime();
+
+	date.setMonth(date.getMonth()-1);
+
+	const monthAgots = date.getTime();
+	var bottomLine = -1;
+	var topLine = monthAgots;
+
+	while(normNow >= date.getTime()) {
+		date.setDate(date.getDate()+1);
+		bottomLine = topLine;
+		topLine = date.getTime();
+
+		//console.log(monthName, topLine-bottomLine, topLine, bottomLine);
+		let currentData = {};
+		for (let j = 0; j < knd.length; j++) {
+			if (knd[j] - bottomLine >= 0 && topLine - knd[j] > 0)
+				currentData[knd[j]] = normdata[knd[j]];
+		}
+
+		let avgData = averageData(currentData);
+
+		dailyData[bottomLine] = avgData;
+	}
+	return dailyData;
 }
 
 //data is normalized data
@@ -106,6 +147,7 @@ const makeGraphByDataAndType = (data, type) => {
 			let datestr = (new Date(+k[i])).toLocaleDateString();
 			graphLabels[i] = datestr;
 		}
+
 		graphData[k[i]] = data[k[i]][type];
 	}
 
