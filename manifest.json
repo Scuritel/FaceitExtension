@@ -3,7 +3,7 @@
     "description": "Addtitional stats about you on faceit",
     "icons": { "128": "Logo.png" },
 
-    "version": "1.0",
+    "version": "1.1",
     "manifest_version": 2,
 
     "author": "Scuril",

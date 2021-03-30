@@ -41,6 +41,10 @@ const getData = async () => {
 	monthlyData = toMonthlyData(normalizedMatches);
 	dailyData = toDailyData(normalizedMatches);
 
+	graphdataSelect = $("*").filter((i,x)=>
+		x.innerText?.toLowerCase() == "performance statistics")
+		.parent().find("select");
+
 	console.log(nick,profileInfo,guid,
 		lifetime,matchesCount,matches);
 	console.log(local);
@@ -52,13 +56,13 @@ const removeAllListeners = (element) => {
 	element = $(element)[0];
 	elClone = element.cloneNode(true);
 	element.parentNode.replaceChild(elClone, element);
+	return $(elClone);
 }
 
 const setManageElements = () => {
-	const updGraph = () => setTimeout(getGraphParams, 150);
-	removeAllListeners($("select"));
+	graphdataSelect = removeAllListeners(graphdataSelect);
 	removeAllListeners($(".performance-stats a"));
-	$("select").on('click', getGraphParams);
+	graphdataSelect.on('click', getGraphParams);
 	$(".performance-stats a").on('click', getGraphParams);
 }
 

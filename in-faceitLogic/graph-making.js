@@ -23,12 +23,13 @@ Object.reverse = (object) => {
 	return newObject;
 }
 
+var graphdataSelect;
 const getGraphParams = (e) => {
 	var el = $(e.target);
 	let graphdata, graphtype;
 
-	var gd = $("select").val();
-	var gt = $(".performance-stats li.active a").text();
+	var gd = graphdataSelect.val();
+	var gt = $(".performance-stats li.active span").text();
 
 	if (el.val() == "") {
 		if (el.find("span").length == 1) {
@@ -39,7 +40,6 @@ const getGraphParams = (e) => {
 	}
 	else {
 		gd = el.val();
-		gt = "Elo";
 		console.log("That's data");
 	}
 
