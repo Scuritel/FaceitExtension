@@ -1,6 +1,6 @@
 var nick, profileInfo, guid, 
 	lifetime, matchesCount, matches, 
-	normalizedMatches;
+	normalizedMatches, monthlyData, dailyData;
 var local = {
 	'c2':[false,'kd'],
 	'c3':[false,'kr'],
@@ -37,18 +37,37 @@ const getData = async () => {
 	matchesCount = getMatchesCount(lifetime);
 	matches = await getMatchStats(guid, matchesCount);
 
+	normalizedMatches = normalizeMatchesData(matches);
+	monthlyData = toMonthlyData(normalizedMatches);
+	dailyData = toDailyData(normalizedMatches);
+
 	console.log(nick,profileInfo,guid,
 		lifetime,matchesCount,matches);
 	console.log(local);
+
+	console.log(normalizedMatches, monthlyData, dailyData);
+}
+
+const removeAllListeners = (element) => {
+	element = $(element)[0];
+	elClone = element.cloneNode(true);
+	element.parentNode.replaceChild(elClone, element);
+}
+
+const setManageElements = () => {
+	const updGraph = () => setTimeout(getGraphParams, 150);
+	removeAllListeners($("select"));
+	removeAllListeners($(".performance-stats a"));
+	$("select").on('click', getGraphParams);
+	$(".performance-stats a").on('click', getGraphParams);
 }
 
 const onStart = async () => {
 	await getData();
-	normalizedMatches = normalizeMatchesData(matches);
-	console.log(normalizedMatches);
-	var D = toDailyData(normalizedMatches);
-	console.log(D);
-	makeGraphByDataAndType(D, graphTypes[1]);
+	setManageElements()
+
+	makeGraphByDataAndType(normalizedMatches, graphTypes[0]);
+
 	setInterval(updateTable, 500);
 }
 

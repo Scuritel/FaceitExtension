@@ -7,6 +7,84 @@ const monthNames =
 	  "July", "August", "September", "October", "November", 
 	  "December"];
 
+Object.reverse = (object) => {
+	var newObject = {};
+	var keys = [];
+
+	for (var key in object) {
+		keys.push(key);
+	}
+
+	for (var i = keys.length - 1; i >= 0; i--) {
+		var value = object[keys[i]];
+		newObject[keys[i]]= value;
+	}       
+
+	return newObject;
+}
+
+const getGraphParams = (e) => {
+	var el = $(e.target);
+	let graphdata, graphtype;
+
+	var gd = $("select").val();
+	var gt = $(".performance-stats li.active a").text();
+
+	if (el.val() == "") {
+		if (el.find("span").length == 1) {
+			el = el.find("span");
+		}
+		gt = el.text();
+		console.log("That's type");
+	}
+	else {
+		gd = el.val();
+		gt = "Elo";
+		console.log("That's data");
+	}
+
+	switch(gd) {
+		case "string:match":
+			graphdata = normalizedMatches;
+			break;
+		case "string:year":
+			graphdata = monthlyData;
+			break;
+		case "string:month":
+			graphdata = dailyData;
+			break;
+		default:
+			console.log(gd);
+			throw "Unknown graph data";
+	}
+	switch (gt) {
+		case "Elo":
+			graphtype = graphTypes[0];
+			break;
+		case "K/R Ratio":
+			graphtype = graphTypes[1];
+			break;
+		case "K/D Ratio":
+			graphtype = graphTypes[2];
+			break;
+		case "Headshots":
+			graphtype = graphTypes[3];
+			break;
+		case "Headshots %":
+			graphtype = graphTypes[4];
+			break;
+		default:
+			console.log(gt);
+			throw "Unknown graph data type";
+	}
+	console.log(gd, gt);
+	makeGraphByDataAndType(graphdata, graphtype);
+}
+
+
+
+
+
 const normalizeMatchesData = (data) => {
 	var newData = {}
 	for (let i = 0; i < data.length;i++) {
@@ -79,7 +157,7 @@ const toMonthlyData = (normdata) => {
 		monthData[monthName] = avgData;
 	}
 
-	return monthData;
+	return Object.reverse(monthData);
 }
 
 //makes normalized match data monthly graph data by averaging
@@ -117,8 +195,11 @@ const toDailyData = (normdata) => {
 
 		dailyData[bottomLine] = avgData;
 	}
-	return dailyData;
+	return Object.reverse(dailyData);
 }
+
+
+
 
 //data is normalized data
 //type is what kind of data graph should show (elo, kr, kd, hs, hs%)
@@ -135,7 +216,6 @@ const makeGraphByDataAndType = (data, type) => {
 		}
 		data = data1;
 	}
-
 
 	k = Object.keys(data);
 	var graphData = {};
@@ -154,26 +234,38 @@ const makeGraphByDataAndType = (data, type) => {
 	if (graphLabels.length == 0) {
 		//that's monthly data
 		graphLabels = Object.keys(graphData);
-		type = "avg. " + type;
 	}
-	console.log(graphLabels, graphData);
-	console.log(Object.values(graphData));
+	graphLabels = graphLabels.reverse();
+	var graphDataset = Object.values(graphData).reverse();
+	console.log(graphLabels, graphDataset);
 
 
-	makeGraphByLabelData(graphLabels, Object.values(graphData), type);
+	makeGraphByLabelData(graphLabels, graphDataset, type);
 }
 
+var myChart;
 //must get parameter as in scheme: ["June", "Today"], [156,489], "damage"
 const makeGraphByLabelData = (labels, data, type) => {
-	const cpar = $(".performance-stats__locked").parent();
-	cpar.children().remove();
-	cpar.append('<canvas class="mypremium" style="width: 100%; height:100%"><p>Ur browser suck dick. Sorry :\(</p></canvas>');
-	const canvas = $(".mypremium")[0];
-	const width = canvas.width = cpar.width();
-	const  height = canvas.height = cpar.height();
-
+	var canvas = $(".mypremium")[0];
+	if (!canvas) {
+		const cpar = $(".performance-stats__locked").parent();
+		cpar.children().remove();
+		cpar.append('<canvas class="mypremium" style="width: 100%; height:100%">'+
+						'<p>Ur browser suck dick. Sorry :\(</p>'+
+					'</canvas>');
+		canvas = $(".mypremium")[0];
+		canvas.width = cpar.width();
+		canvas.height = cpar.height();
+	}
 	const ctx = canvas.getContext('2d');
-	var myChart = new Chart(ctx, {
+	ctx.clearRect(0,0,canvas.width,canvas.height);
+	if (myChart) {
+		myChart.clear();
+		myChart.destroy();
+	}
+
+
+	myChart = new Chart(ctx, {
 		type: 'line',
 		data: {
 			labels: labels,
