@@ -1,0 +1,76 @@
+myid is 5beab55c-6521-454c-b39d-ea077399295d
+https:api.faceit.com/stats/v1/stats/time/users/%userid/games/csgo?page is %page&size is %size
+&page is optional
+&size limit is 2000
+i17 is Team Win
+
+elo is Elo
+
+m1 is Matches
+m2 is Wins
+m3 is Kills
+m4 is Deaths
+m5 is Assists
+m6 is MVPs
+m7 is K/D Ratio
+m8 is Rounds
+m9 is Headshots
+m10 is Triple Kills
+m11 is Quadro Kills
+m12 is Penta Kills
+m13 is Total Headshots %
+m14 is K/R Ratio
+m15 is Total K/D Ratio
+m16 is Total K/R Ratio
+m17 is Total Headshots %
+m18 is Total Headshots per Match
+
+k1 is Average Kills
+k2 is Average Deaths
+k3 is Average Assists
+k4 is Average MVPs
+k5 is Average K/D Ratio
+k6 is Win Rate %
+k7 is Headshots per Match
+k8 is Average Headshots %
+k9 is Average K/R Ratio
+k10 is Average Triple Kills
+k11 is Average Quadro Kills
+k12 is Average Penta Kills
+k13 is Team Average K/D Ratio
+k14 is Team Average K/R Ratio
+k15 is Team Average Headshots %
+k16 is Team Headshots per Match
+
+c1
+c2 is K/D Ratio
+c3 is K/R Ratio
+c4 is Headshots %
+c5 is Final Score
+c6 is Team K/D Ratio
+c7 is Team K/R Ratio
+c8 is Team Headshots %
+c9 is Team Headshots
+
+s0 is Recent Results
+s1 is Current Win Streak
+s2 is Longest Win Streak
+
+i0 is Region
+i1 is Map
+i2 is Winner
+i3 is First Half Score
+i4 is Second Half Score
+i5 is Team
+i6 is Kills
+i7 is Assists
+i8 is Deaths
+i9 is MVPs
+i10 is Result
+i12 is Rounds
+i13 is Headshots
+i14 is Triple Kills
+i15 is Quadro Kills
+i16 is Penta Kills
+i18 is Score
+i19 is Overtime score

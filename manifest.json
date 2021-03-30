@@ -1,10 +1,10 @@
 {
-    "name":"Faceit stats",
-    "description":"Addtitional stats about you on faceit",
+    "name": "Faceit stats",
+    "description": "Addtitional stats about you on faceit",
     "icons": { "128": "Logo.png" },
 
-    "version":"1.0",
-    "manifest_version":2,
+    "version": "1.0",
+    "manifest_version": 2,
 
     "author": "Scuril",
 
@@ -14,12 +14,18 @@
         "storage"
     ],
     "browser_action":{
-        "default_title":"FEx",
-        "default_popup":"main.html"
+        "default_title": "FEx",
+        "default_popup": "main.html"
     },
     "content_scripts":[{
-        "matches":["https://www.faceit.com/en/players/*/stats/csgo"],
-        "js":["jqueryMin.js", "logic.js"],
-        "run_at":"document_end"
+        "matches": ["https://www.faceit.com/en/players/*/stats/csgo"],
+        "js": [
+            "jqueryMin.js", 
+            "chart.js/Chart.min.js", 
+            "in-faceitLogic/get-methods.js", 
+            "in-faceitLogic/table-making.js",
+            "in-faceitLogic/graph-making.js", 
+            "in-faceitLogic/main.js"],
+        "run_at": "document_end"
     }]
 }
